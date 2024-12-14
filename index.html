@@ -73,9 +73,9 @@
         <div id="prevent-close" class="box" onclick="togglePreventClose()">
             Prevent Close: Off
         </div>
-        <!-- URL Cloak Box (On/Off toggle) -->
-        <div id="url-cloak" class="box" onclick="toggleURLCloak()">
-            Cloak URL: Off
+        <!-- Windows 11 Emulator Box (On/Off toggle) -->
+        <div id="windows-emulator" class="box" onclick="toggleWindowsEmulator()">
+            Windows 11 Emulator: Off
         </div>
     </div>
 
@@ -180,49 +180,34 @@
             return message; // For older browsers
         }
 
-        // URL Cloak Logic
-        let urlCloakActive = false;
-        let urlCloakInterval = null;
+        // Windows 11 Emulator Logic
+        let windowsEmulatorActive = false;
 
-        // Function to toggle URL Cloak on/off
-        function toggleURLCloak() {
-            urlCloakActive = !urlCloakActive;
-            const cloakBox = document.getElementById('url-cloak');
-            if (urlCloakActive) {
-                cloakBox.textContent = "Cloak URL: On";
-                cloakBox.classList.add('on');
-                startURLCloak();
+        // Function to toggle the Windows 11 Emulator on/off
+        function toggleWindowsEmulator() {
+            windowsEmulatorActive = !windowsEmulatorActive;
+            const emulatorBox = document.getElementById('windows-emulator');
+            if (windowsEmulatorActive) {
+                emulatorBox.textContent = "Windows 11 Emulator: On";
+                emulatorBox.classList.add('on');
+                loadWindowsEmulator();
             } else {
-                cloakBox.textContent = "Cloak URL: Off";
-                cloakBox.classList.remove('on');
-                stopURLCloak();
+                emulatorBox.textContent = "Windows 11 Emulator: Off";
+                emulatorBox.classList.remove('on');
+                stopWindowsEmulator();
             }
         }
 
-        // Start URL Cloak (keep changing the iframe src without changing the browser URL)
-        function startURLCloak() {
-            urlCloakInterval = setInterval(() => {
-                const iframe = document.getElementById('website-iframe');
-                const randomUrls = [
-                    'https://example.com',
-                    'https://google.com',
-                    'https://wikipedia.org',
-                    'https://github.com'
-                ];
-
-                // Randomly select a URL and load it into the iframe
-                const randomUrl = randomUrls[Math.floor(Math.random() * randomUrls.length)];
-
-                iframe.src = randomUrl;  // Change iframe source to a new URL
-            }, 2000);  // Change the URL every 2 seconds
+        // Load Windows 11 Emulator URL (change this URL to a working Windows 11 emulator)
+        function loadWindowsEmulator() {
+            const iframe = document.getElementById('website-iframe');
+            iframe.src = "https://www.msdn.microsoft.com/en-us/windows-11"; // Placeholder for Windows 11 Emulator
         }
 
-        // Stop URL Cloak
-        function stopURLCloak() {
-            if (urlCloakInterval) {
-                clearInterval(urlCloakInterval);
-                urlCloakInterval = null;
-            }
+        // Stop Windows 11 Emulator (clear the iframe)
+        function stopWindowsEmulator() {
+            const iframe = document.getElementById('website-iframe');
+            iframe.src = '';  // Clear iframe content
         }
     </script>
 </body>
