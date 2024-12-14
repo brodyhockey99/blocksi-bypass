@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Toggle Boxes with IPv4 Input</title>
+    <title>Website Emulator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -49,28 +49,31 @@
             font-size: 14px;
             padding: 5px;
         }
-        .link {
-            margin-top: 10px;
-            font-size: 14px;
-            color: blue;
-            text-decoration: underline;
-            cursor: pointer;
+        iframe {
+            width: 80%;
+            height: 400px;
+            margin-top: 20px;
+            border: 1px solid #ccc;
         }
     </style>
 </head>
 <body>
-    <h1>Toggle Boxes with IPv4 Input</h1>
-    <p>Type an IPv4 address and click the boxes to interact.</p>
+    <h1>Website Emulator</h1>
+    <p>Enter a website URL and click the boxes to interact.</p>
     <div class="container">
-        <!-- IPv4 Input Box -->
+        <!-- Website Input Box -->
         <div class="input-box">
-            <input type="text" id="ipv4-input" placeholder="Enter IPv4" oninput="updateLink()" />
-            <a id="ipv4-link" class="link" href="#" target="_blank">Link</a>
+            <input type="text" id="url-input" placeholder="Enter URL" oninput="updateIframe()" />
         </div>
         <!-- Toggleable Boxes -->
         <div class="box" onclick="toggleBox(this)">Off</div>
         <div class="box" onclick="toggleBox(this)">Off</div>
         <div class="box" onclick="toggleBox(this)">Off</div>
+    </div>
+
+    <!-- iFrame for website emulator -->
+    <div id="website-container">
+        <iframe id="website-iframe" src="" frameborder="0"></iframe>
     </div>
 
     <script>
@@ -80,22 +83,25 @@
             box.textContent = box.classList.contains('on') ? 'On' : 'Off';
         }
 
-        // Function to update the link based on IPv4 input
-        function updateLink() {
-            const input = document.getElementById('ipv4-input');
-            const link = document.getElementById('ipv4-link');
+        // Function to update the iframe based on the URL input
+        function updateIframe() {
+            const input = document.getElementById('url-input');
+            const iframe = document.getElementById('website-iframe');
 
-            // Get the input value and validate it
-            const ipv4 = input.value.trim();
-            const ipv4Regex = /^(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)\.(25[0-5]|2[0-4][0-9]|[0-1]?[0-9][0-9]?)$/;
+            const url = input.value.trim();
 
-            if (ipv4Regex.test(ipv4)) {
-                link.href = `http://${ipv4}`;
-                link.textContent = `Go to ${ipv4}`;
+            // Validate the URL and update iframe source
+            if (isValidUrl(url)) {
+                iframe.src = url;
             } else {
-                link.href = "#";
-                link.textContent = "Invalid IPv4";
+                iframe.src = '';  // Clear iframe if invalid URL
             }
+        }
+
+        // Function to validate the URL input
+        function isValidUrl(url) {
+            const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}([\/\w\.-]*)*\/?$/;
+            return regex.test(url);
         }
     </script>
 </body>
