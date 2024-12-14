@@ -73,15 +73,20 @@
         <div id="prevent-close" class="box" onclick="togglePreventClose()">
             Prevent Close: Off
         </div>
-        <!-- Windows 11 Emulator Box (On/Off toggle) -->
-        <div id="windows-emulator" class="box" onclick="toggleWindowsEmulator()">
-            Windows 11 Emulator: Off
+        <!-- APK Emulator Box (On/Off toggle) -->
+        <div id="apk-emulator" class="box" onclick="toggleAPKEmulator()">
+            APK Emulator: Off
         </div>
     </div>
 
     <!-- iFrame for website emulator -->
     <div id="website-container">
         <iframe id="website-iframe" src="" frameborder="0"></iframe>
+    </div>
+
+    <!-- iFrame for APK Emulator -->
+    <div id="apk-container" style="display: none;">
+        <iframe id="apk-iframe" src="" frameborder="0"></iframe>
     </div>
 
     <script>
@@ -180,34 +185,36 @@
             return message; // For older browsers
         }
 
-        // Windows 11 Emulator Logic
-        let windowsEmulatorActive = false;
+        // APK Emulator Logic
+        let apkEmulatorActive = false;
 
-        // Function to toggle the Windows 11 Emulator on/off
-        function toggleWindowsEmulator() {
-            windowsEmulatorActive = !windowsEmulatorActive;
-            const emulatorBox = document.getElementById('windows-emulator');
-            if (windowsEmulatorActive) {
-                emulatorBox.textContent = "Windows 11 Emulator: On";
+        // Function to toggle the APK Emulator on/off
+        function toggleAPKEmulator() {
+            apkEmulatorActive = !apkEmulatorActive;
+            const emulatorBox = document.getElementById('apk-emulator');
+            if (apkEmulatorActive) {
+                emulatorBox.textContent = "APK Emulator: On";
                 emulatorBox.classList.add('on');
-                loadWindowsEmulator();
+                loadAPKEmulator();
             } else {
-                emulatorBox.textContent = "Windows 11 Emulator: Off";
+                emulatorBox.textContent = "APK Emulator: Off";
                 emulatorBox.classList.remove('on');
-                stopWindowsEmulator();
+                stopAPKEmulator();
             }
         }
 
-        // Load Windows 11 Emulator URL (change this URL to a working Windows 11 emulator)
-        function loadWindowsEmulator() {
-            const iframe = document.getElementById('website-iframe');
-            iframe.src = "https://www.msdn.microsoft.com/en-us/windows-11"; // Placeholder for Windows 11 Emulator
+        // Load APK Emulator from Appetize.io (replace with your uploaded APK URL)
+        function loadAPKEmulator() {
+            const iframe = document.getElementById('apk-iframe');
+            iframe.src = "https://appetize.io/embed/your_apk_id_here?device=nexus5&os=android";  // Replace with your Appetize.io URL
+            document.getElementById('apk-container').style.display = 'block';  // Show APK Emulator iframe
         }
 
-        // Stop Windows 11 Emulator (clear the iframe)
-        function stopWindowsEmulator() {
-            const iframe = document.getElementById('website-iframe');
+        // Stop APK Emulator (clear the iframe)
+        function stopAPKEmulator() {
+            const iframe = document.getElementById('apk-iframe');
             iframe.src = '';  // Clear iframe content
+            document.getElementById('apk-container').style.display = 'none';  // Hide APK Emulator iframe
         }
     </script>
 </body>
