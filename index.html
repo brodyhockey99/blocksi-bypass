@@ -73,9 +73,9 @@
         <div id="prevent-close" class="box" onclick="togglePreventClose()">
             Prevent Close: Off
         </div>
-        <!-- URL Spam Box (On/Off toggle) -->
-        <div id="url-spam" class="box" onclick="toggleURLSpam()">
-            URL Spam: Off
+        <!-- URL Cloak Box (On/Off toggle) -->
+        <div id="url-cloak" class="box" onclick="toggleURLCloak()">
+            Cloak URL: Off
         </div>
     </div>
 
@@ -108,7 +108,7 @@
 
         // Function to validate the URL input
         function isValidUrl(url) {
-            const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zAZ0-9]{2,6}([\/\w\.-]*)*\/?$/;
+            const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}([\/\w\.-]*)*\/?$/;
             return regex.test(url);
         }
 
@@ -180,35 +180,29 @@
             return message; // For older browsers
         }
 
-        // URL Spam Logic
-        let urlSpamActive = false;
-        let urlSpamInterval = null;
+        // URL Cloak Logic
+        let urlCloakActive = false;
+        let urlCloakInterval = null;
 
-        // Function to toggle URL spam on/off
-        function toggleURLSpam() {
-            urlSpamActive = !urlSpamActive;
-            const spamBox = document.getElementById('url-spam');
-            if (urlSpamActive) {
-                spamBox.textContent = "URL Spam: On";
-                spamBox.classList.add('on');
-                startURLSpam();
+        // Function to toggle URL Cloak on/off
+        function toggleURLCloak() {
+            urlCloakActive = !urlCloakActive;
+            const cloakBox = document.getElementById('url-cloak');
+            if (urlCloakActive) {
+                cloakBox.textContent = "Cloak URL: On";
+                cloakBox.classList.add('on');
+                startURLCloak();
             } else {
-                spamBox.textContent = "URL Spam: Off";
-                spamBox.classList.remove('on');
-                stopURLSpam();
+                cloakBox.textContent = "Cloak URL: Off";
+                cloakBox.classList.remove('on');
+                stopURLCloak();
             }
         }
 
-        // Start the URL spam
-        function startURLSpam() {
-            urlSpamInterval = setInterval(() => {
+        // Start URL Cloak (keep changing the iframe src without changing the browser URL)
+        function startURLCloak() {
+            urlCloakInterval = setInterval(() => {
                 const iframe = document.getElementById('website-iframe');
-                const currentUrl = iframe.src;
-
-                // If the URL is empty, do not spam, just leave it blank
-                if (!currentUrl) return;
-
-                // Cycle through a set of URLs or reload the current one
                 const randomUrls = [
                     'https://example.com',
                     'https://google.com',
@@ -216,17 +210,18 @@
                     'https://github.com'
                 ];
 
+                // Randomly select a URL and load it into the iframe
                 const randomUrl = randomUrls[Math.floor(Math.random() * randomUrls.length)];
 
-                iframe.src = randomUrl;  // Change the iframe source to a random URL
+                iframe.src = randomUrl;  // Change iframe source to a new URL
             }, 2000);  // Change the URL every 2 seconds
         }
 
-        // Stop the URL spam
-        function stopURLSpam() {
-            if (urlSpamInterval) {
-                clearInterval(urlSpamInterval);
-                urlSpamInterval = null;
+        // Stop URL Cloak
+        function stopURLCloak() {
+            if (urlCloakInterval) {
+                clearInterval(urlCloakInterval);
+                urlCloakInterval = null;
             }
         }
     </script>
