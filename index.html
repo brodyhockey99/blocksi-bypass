@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Emulator with FPS Counter</title>
+    <title>Blocksi Bypass</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -18,7 +18,7 @@
             gap: 20px;
             flex-wrap: wrap;
         }
-        .box, .input-box {
+        .box {
             width: 100px;
             height: 100px;
             background-color: #ccc;
@@ -58,8 +58,8 @@
     </style>
 </head>
 <body>
-    <h1>Website Emulator with FPS Counter</h1>
-    <p>Enter a website URL, and the FPS counter can be toggled On/Off.</p>
+    <h1>Blocksi Bypass Page</h1>
+    <p>Prevent users from closing the page, toggle FPS counter, and input website URLs.</p>
     <div class="container">
         <!-- Website Input Box -->
         <div class="input-box">
@@ -69,9 +69,10 @@
         <div id="fps-counter" class="box" onclick="toggleFPSCounter()">
             FPS: Off
         </div>
-        <!-- Toggleable Boxes -->
-        <div class="box" onclick="toggleBox(this)">Off</div>
-        <div class="box" onclick="toggleBox(this)">Off</div>
+        <!-- Prevent Page Close Box -->
+        <div id="prevent-close" class="box" onclick="togglePreventClose()">
+            Prevent Close: Off
+        </div>
     </div>
 
     <!-- iFrame for website emulator -->
@@ -138,6 +139,41 @@
                 fpsCounterElement.textContent = "FPS: Off";  // Show Off
                 fpsCounterElement.classList.remove('on');
             }
+        }
+
+        // Prevent Page Close Logic
+        let preventCloseActive = false;  // Flag to control the "prevent close" functionality
+        const preventCloseElement = document.getElementById('prevent-close');
+        
+        // Toggle the prevent page close on/off
+        function togglePreventClose() {
+            preventCloseActive = !preventCloseActive;
+            if (preventCloseActive) {
+                preventCloseElement.textContent = "Prevent Close: On";
+                preventCloseElement.classList.add('on');
+                enablePreventClose();
+            } else {
+                preventCloseElement.textContent = "Prevent Close: Off";
+                preventCloseElement.classList.remove('on');
+                disablePreventClose();
+            }
+        }
+
+        // Enable Prevent Close functionality
+        function enablePreventClose() {
+            window.addEventListener("beforeunload", beforeUnloadHandler);
+        }
+
+        // Disable Prevent Close functionality
+        function disablePreventClose() {
+            window.removeEventListener("beforeunload", beforeUnloadHandler);
+        }
+
+        // Handler for beforeunload event
+        function beforeUnloadHandler(event) {
+            const message = "Are you sure you want to leave this page?";
+            event.returnValue = message; // Standard for modern browsers
+            return message; // For older browsers
         }
     </script>
 </body>
