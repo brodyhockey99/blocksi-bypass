@@ -59,15 +59,15 @@
 </head>
 <body>
     <h1>Website Emulator with FPS Counter</h1>
-    <p>Enter a website URL, and the FPS counter will update in real-time.</p>
+    <p>Enter a website URL, and the FPS counter can be toggled On/Off.</p>
     <div class="container">
         <!-- Website Input Box -->
         <div class="input-box">
             <input type="text" id="url-input" placeholder="Enter URL" oninput="updateIframe()" />
         </div>
-        <!-- FPS Counter Box -->
-        <div id="fps-counter" class="box">
-            FPS: 0
+        <!-- FPS Counter Box (On/Off toggle) -->
+        <div id="fps-counter" class="box" onclick="toggleFPSCounter()">
+            FPS: Off
         </div>
         <!-- Toggleable Boxes -->
         <div class="box" onclick="toggleBox(this)">Off</div>
@@ -110,20 +110,35 @@
         // FPS Counter Logic
         let lastTime = 0;
         let fps = 0;
+        let fpsActive = false;  // Flag to control FPS counting
         const fpsCounterElement = document.getElementById('fps-counter');
 
         function updateFPS(timestamp) {
-            if (lastTime !== 0) {
-                const delta = timestamp - lastTime;
-                fps = Math.round(1000 / delta);
+            if (fpsActive) {
+                if (lastTime !== 0) {
+                    const delta = timestamp - lastTime;
+                    fps = Math.round(1000 / delta);
+                }
+                lastTime = timestamp;
+                fpsCounterElement.textContent = `FPS: ${fps}`;
             }
-            lastTime = timestamp;
-            fpsCounterElement.textContent = `FPS: ${fps}`;
-            requestAnimationFrame(updateFPS); // Continuously update FPS
+            requestAnimationFrame(updateFPS); // Continuously update FPS if active
         }
 
-        // Start FPS counter
+        // Start FPS counter (but it's initially off)
         requestAnimationFrame(updateFPS);
+
+        // Function to toggle FPS counter on/off
+        function toggleFPSCounter() {
+            fpsActive = !fpsActive;
+            if (fpsActive) {
+                fpsCounterElement.textContent = `FPS: ${fps}`;  // Show FPS
+                fpsCounterElement.classList.add('on');
+            } else {
+                fpsCounterElement.textContent = "FPS: Off";  // Show Off
+                fpsCounterElement.classList.remove('on');
+            }
+        }
     </script>
 </body>
 </html>
