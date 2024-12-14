@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Website Emulator</title>
+    <title>Website Emulator with FPS Counter</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -58,15 +58,18 @@
     </style>
 </head>
 <body>
-    <h1>Website Emulator</h1>
-    <p>Enter a website URL and click the boxes to interact.</p>
+    <h1>Website Emulator with FPS Counter</h1>
+    <p>Enter a website URL, and the FPS counter will update in real-time.</p>
     <div class="container">
         <!-- Website Input Box -->
         <div class="input-box">
             <input type="text" id="url-input" placeholder="Enter URL" oninput="updateIframe()" />
         </div>
+        <!-- FPS Counter Box -->
+        <div id="fps-counter" class="box">
+            FPS: 0
+        </div>
         <!-- Toggleable Boxes -->
-        <div class="box" onclick="toggleBox(this)">Off</div>
         <div class="box" onclick="toggleBox(this)">Off</div>
         <div class="box" onclick="toggleBox(this)">Off</div>
     </div>
@@ -103,6 +106,24 @@
             const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}([\/\w\.-]*)*\/?$/;
             return regex.test(url);
         }
+
+        // FPS Counter Logic
+        let lastTime = 0;
+        let fps = 0;
+        const fpsCounterElement = document.getElementById('fps-counter');
+
+        function updateFPS(timestamp) {
+            if (lastTime !== 0) {
+                const delta = timestamp - lastTime;
+                fps = Math.round(1000 / delta);
+            }
+            lastTime = timestamp;
+            fpsCounterElement.textContent = `FPS: ${fps}`;
+            requestAnimationFrame(updateFPS); // Continuously update FPS
+        }
+
+        // Start FPS counter
+        requestAnimationFrame(updateFPS);
     </script>
 </body>
 </html>
