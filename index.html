@@ -55,6 +55,14 @@
             margin-top: 20px;
             border: 1px solid #ccc;
         }
+        #file-upload-container {
+            display: none;
+            margin-top: 20px;
+        }
+        #file-name {
+            margin-top: 10px;
+            font-size: 16px;
+        }
     </style>
 </head>
 <body>
@@ -73,9 +81,9 @@
         <div id="prevent-close" class="box" onclick="togglePreventClose()">
             Prevent Close: Off
         </div>
-        <!-- APK Emulator Box (On/Off toggle) -->
-        <div id="apk-emulator" class="box" onclick="toggleAPKEmulator()">
-            APK Emulator: Off
+        <!-- File Uploader Box (On/Off toggle) -->
+        <div id="file-uploader" class="box" onclick="toggleFileUploader()">
+            File Uploader: Off
         </div>
     </div>
 
@@ -84,9 +92,10 @@
         <iframe id="website-iframe" src="" frameborder="0"></iframe>
     </div>
 
-    <!-- iFrame for APK Emulator -->
-    <div id="apk-container" style="display: none;">
-        <iframe id="apk-iframe" src="" frameborder="0"></iframe>
+    <!-- File Upload Container -->
+    <div id="file-upload-container">
+        <input type="file" id="file-input" onchange="handleFileUpload()" />
+        <div id="file-name"></div>
     </div>
 
     <script>
@@ -185,36 +194,33 @@
             return message; // For older browsers
         }
 
-        // APK Emulator Logic
-        let apkEmulatorActive = false;
+        // File Uploader Logic
+        let fileUploaderActive = false;
 
-        // Function to toggle the APK Emulator on/off
-        function toggleAPKEmulator() {
-            apkEmulatorActive = !apkEmulatorActive;
-            const emulatorBox = document.getElementById('apk-emulator');
-            if (apkEmulatorActive) {
-                emulatorBox.textContent = "APK Emulator: On";
-                emulatorBox.classList.add('on');
-                loadAPKEmulator();
+        // Function to toggle the file uploader on/off
+        function toggleFileUploader() {
+            fileUploaderActive = !fileUploaderActive;
+            const uploaderBox = document.getElementById('file-uploader');
+            if (fileUploaderActive) {
+                uploaderBox.textContent = "File Uploader: On";
+                uploaderBox.classList.add('on');
+                document.getElementById('file-upload-container').style.display = 'block';  // Show file input
             } else {
-                emulatorBox.textContent = "APK Emulator: Off";
-                emulatorBox.classList.remove('on');
-                stopAPKEmulator();
+                uploaderBox.textContent = "File Uploader: Off";
+                uploaderBox.classList.remove('on');
+                document.getElementById('file-upload-container').style.display = 'none';  // Hide file input
             }
         }
 
-        // Load APK Emulator from Appetize.io (replace with your uploaded APK URL)
-        function loadAPKEmulator() {
-            const iframe = document.getElementById('apk-iframe');
-            iframe.src = "https://appetize.io/embed/your_apk_id_here?device=nexus5&os=android";  // Replace with your Appetize.io URL
-            document.getElementById('apk-container').style.display = 'block';  // Show APK Emulator iframe
-        }
+        // Handle file upload and display file name
+        function handleFileUpload() {
+            const fileInput = document.getElementById('file-input');
+            const fileName = document.getElementById('file-name');
+            const file = fileInput.files[0];
 
-        // Stop APK Emulator (clear the iframe)
-        function stopAPKEmulator() {
-            const iframe = document.getElementById('apk-iframe');
-            iframe.src = '';  // Clear iframe content
-            document.getElementById('apk-container').style.display = 'none';  // Hide APK Emulator iframe
+            if (file) {
+                fileName.textContent = `Selected file: ${file.name}`;
+            }
         }
     </script>
 </body>
