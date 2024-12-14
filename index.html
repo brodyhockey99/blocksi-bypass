@@ -59,7 +59,7 @@
 </head>
 <body>
     <h1>Blocksi Bypass Page</h1>
-    <p>Prevent users from closing the page, toggle FPS counter, and input website URLs.</p>
+    <p>Prevent users from closing the page, toggle FPS counter, input website URLs, and more!</p>
     <div class="container">
         <!-- Website Input Box -->
         <div class="input-box">
@@ -72,6 +72,10 @@
         <!-- Prevent Page Close Box -->
         <div id="prevent-close" class="box" onclick="togglePreventClose()">
             Prevent Close: Off
+        </div>
+        <!-- URL Spam Box (On/Off toggle) -->
+        <div id="url-spam" class="box" onclick="toggleURLSpam()">
+            URL Spam: Off
         </div>
     </div>
 
@@ -104,7 +108,7 @@
 
         // Function to validate the URL input
         function isValidUrl(url) {
-            const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zA-Z]{2,6}([\/\w\.-]*)*\/?$/;
+            const regex = /^(https?:\/\/)?([a-zA-Z0-9-]+\.)+[a-zAZ0-9]{2,6}([\/\w\.-]*)*\/?$/;
             return regex.test(url);
         }
 
@@ -174,6 +178,56 @@
             const message = "Are you sure you want to leave this page?";
             event.returnValue = message; // Standard for modern browsers
             return message; // For older browsers
+        }
+
+        // URL Spam Logic
+        let urlSpamActive = false;
+        let urlSpamInterval = null;
+
+        // Function to toggle URL spam on/off
+        function toggleURLSpam() {
+            urlSpamActive = !urlSpamActive;
+            const spamBox = document.getElementById('url-spam');
+            if (urlSpamActive) {
+                spamBox.textContent = "URL Spam: On";
+                spamBox.classList.add('on');
+                startURLSpam();
+            } else {
+                spamBox.textContent = "URL Spam: Off";
+                spamBox.classList.remove('on');
+                stopURLSpam();
+            }
+        }
+
+        // Start the URL spam
+        function startURLSpam() {
+            urlSpamInterval = setInterval(() => {
+                const iframe = document.getElementById('website-iframe');
+                const currentUrl = iframe.src;
+
+                // If the URL is empty, do not spam, just leave it blank
+                if (!currentUrl) return;
+
+                // Cycle through a set of URLs or reload the current one
+                const randomUrls = [
+                    'https://example.com',
+                    'https://google.com',
+                    'https://wikipedia.org',
+                    'https://github.com'
+                ];
+
+                const randomUrl = randomUrls[Math.floor(Math.random() * randomUrls.length)];
+
+                iframe.src = randomUrl;  // Change the iframe source to a random URL
+            }, 2000);  // Change the URL every 2 seconds
+        }
+
+        // Stop the URL spam
+        function stopURLSpam() {
+            if (urlSpamInterval) {
+                clearInterval(urlSpamInterval);
+                urlSpamInterval = null;
+            }
         }
     </script>
 </body>
